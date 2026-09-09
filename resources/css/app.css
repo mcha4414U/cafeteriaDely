@@ -1,0 +1,6 @@
+:root { --cafe: #352215; --crema: #f7f3ed; }
+body { margin: 0; font-family: system-ui, sans-serif; background: var(--crema); color: var(--cafe); }
+main { max-width: 720px; margin: 10vh auto; padding: 40px; background: white; border-radius: 16px; box-shadow: 0 12px 40px #35221510; }
+h1 { font-family: Georgia, serif; font-size: 42px; }
+p { line-height: 1.7; }
+
