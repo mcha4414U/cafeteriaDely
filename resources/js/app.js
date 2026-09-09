@@ -14,13 +14,24 @@ document.querySelectorAll('[data-ver-clave]').forEach(boton => boton.addEventLis
 document.querySelectorAll('[data-confirmar]').forEach(formulario => formulario.addEventListener('submit', async evento => {
     if (formulario.dataset.confirmado) return;
     evento.preventDefault();
-    const resultado = await Swal.fire({ title: formulario.dataset.confirmar, icon: 'question', showCancelButton: true, confirmButtonText: 'Guardar', cancelButtonText: 'Cancelar', confirmButtonColor: '#382417' });
+    const resultado = await Swal.fire({ title: formulario.dataset.confirmar, icon: 'question', showCancelButton: true, confirmButtonText: formulario.dataset.accion || 'Guardar', cancelButtonText: 'Cancelar', confirmButtonColor: '#382417' });
     if (resultado.isConfirmed) { formulario.dataset.confirmado = '1'; formulario.requestSubmit(); }
 }));
 document.querySelectorAll('.tabla-datos').forEach(tabla => new DataTable(tabla, {
     pageLength: 10, columnDefs: [{ targets: -1, orderable: false }], language: {
-        search: 'Buscar:', lengthMenu: 'Mostrar _MENU_ usuarios', info: 'Mostrando _START_ a _END_ de _TOTAL_ usuarios',
-        infoEmpty: 'Sin usuarios', infoFiltered: '(de _MAX_ usuarios)', zeroRecords: 'No se encontraron usuarios',
-        emptyTable: 'Aún no hay usuarios', paginate: { first: 'Primero', last: 'Último', next: 'Siguiente', previous: 'Anterior' }
+        search: 'Buscar:', lengthMenu: 'Mostrar _MENU_ registros', info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+        infoEmpty: 'Sin registros', infoFiltered: '(de _MAX_ registros)', zeroRecords: 'No se encontraron registros',
+        emptyTable: 'Aún no hay registros', paginate: { first: 'Primero', last: 'Último', next: 'Siguiente', previous: 'Anterior' }
     }, drawCallback: actualizarIconos
 }));
+document.querySelectorAll('[data-vista-imagen]').forEach(campo => {
+    let urlAnterior;
+    campo.addEventListener('change', () => {
+        if (urlAnterior) URL.revokeObjectURL(urlAnterior);
+        const archivo=campo.files[0];
+        if (!archivo) return;
+        const imagen=document.getElementById(campo.dataset.vistaImagen);
+        urlAnterior=URL.createObjectURL(archivo); imagen.src=urlAnterior; imagen.hidden=false;
+        document.querySelector('[data-imagen-vacia]')?.setAttribute('hidden','');
+    });
+});

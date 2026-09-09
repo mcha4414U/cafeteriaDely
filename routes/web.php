@@ -5,6 +5,8 @@ use App\Http\Controllers\ContrasenaController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
+require __DIR__.'/catalogos.php';
+
 Route::get('/', fn () => redirect()->route(auth()->check() ? 'inicio' : 'login'));
 Route::middleware('guest')->group(function () {
     Route::get('/ingresar', [AutenticacionController::class, 'formulario'])->name('login');
