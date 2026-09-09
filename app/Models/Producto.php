@@ -27,4 +27,9 @@ class Producto extends Model
     {
         return $this->stock_actual <= 0 ? 'Agotado' : ($this->stock_actual <= $this->stock_minimo ? 'Stock bajo' : 'Normal');
     }
+
+    public function movimientos()
+    {
+        return $this->hasMany(MovimientoInventario::class);
+    }
 }

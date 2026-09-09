@@ -1,0 +1,8 @@
+@extends('layouts.panel')
+@section('titulo','Detalle de compra')
+@section('contenido')
+<a href="{{ route('compras.index') }}" class="d-inline-block mb-3">← Volver a compras</a><div class="card p-4"><div class="d-flex justify-content-between flex-wrap gap-3 mb-4"><div><p class="etiqueta">RECEPCIÓN DE MERCADERÍA</p><h1>{{ $compra->numero }}</h1><p class="text-secondary mb-0">{{ $compra->fecha->format('d/m/Y') }} · {{ ucfirst($compra->estado) }}</p></div><div><p class="mb-1"><strong>{{ $compra->nombre_proveedor ?? $compra->proveedor?->nombre }}</strong></p><p class="small text-secondary">Registrada por {{ $compra->usuario?->nombre }}<br>{{ $compra->created_at->format('d/m/Y H:i') }}</p></div></div>
+<div class="table-responsive"><table class="table"><thead><tr><th>Producto</th><th>Cantidad</th><th>Unidad</th><th>Costo unitario</th><th>Subtotal</th></tr></thead><tbody>@foreach($compra->detalles as $detalle)<tr><td>{{ $detalle->nombre_producto ?? $detalle->producto?->nombre }}</td><td>{{ $detalle->cantidad }}</td><td>{{ $detalle->unidad_medida ?? $detalle->producto?->unidad_medida }}</td><td>Bs. {{ number_format($detalle->costo_unitario,2) }}</td><td>Bs. {{ number_format($detalle->subtotal,2) }}</td></tr>@endforeach</tbody></table></div>
+<div class="d-flex justify-content-between flex-wrap gap-4 mt-4"><p class="text-secondary celda-texto">{{ $compra->observaciones }}</p><div class="resumen-compra"><span>Total registrado</span><strong>Bs. {{ number_format($compra->total,2) }}</strong></div></div>
+@if(auth()->user()->tienePermiso('inventario.gestionar'))<a class="mt-4" href="{{ route('inventario.movimientos',['compra_id'=>$compra->id]) }}">Ver entradas de esta compra →</a>@endif</div>
+@endsection

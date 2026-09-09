@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'array' => 'El campo :attribute debe contener una lista válida.',
+    'uuid' => 'El identificador del formulario no es válido. Abre el formulario de nuevo.',
+    'distinct' => 'No se permiten valores repetidos en :attribute.',
+    'before_or_equal' => 'La fecha de :attribute no puede ser posterior a hoy.',
+    'after_or_equal' => 'La fecha final debe ser igual o posterior a la fecha inicial.',
     'required' => 'El campo :attribute es obligatorio.', 'email' => 'Ingresa un correo electrónico válido.',
     'unique' => 'Este :attribute ya está registrado, incluso entre los archivados.', 'confirmed' => 'La confirmación de :attribute no coincide.',
     'string' => 'El campo :attribute debe ser texto.', 'integer' => 'Selecciona un valor válido para :attribute.', 'boolean' => 'Selecciona un estado válido.',

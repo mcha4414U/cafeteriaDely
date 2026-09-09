@@ -1,10 +1,11 @@
 import './bootstrap';
+import './compras';
 import 'bootstrap';
 import 'admin-lte';
-import { createIcons, Coffee, Eye, EyeOff, ArrowRight, Menu, House, Users, LogOut, ShieldCheck, Plus, Pencil, Lock } from 'lucide';
+import { createIcons, Coffee, Eye, EyeOff, ArrowRight, Menu, House, Users, LogOut, ShieldCheck, Plus, Pencil, Lock, ShoppingCart, Package } from 'lucide';
 import Swal from 'sweetalert2';
 import DataTable from 'datatables.net-bs5';
-const actualizarIconos = () => createIcons({ icons: { Coffee, Eye, EyeOff, ArrowRight, Menu, House, Users, LogOut, ShieldCheck, Plus, Pencil, Lock } });
+const actualizarIconos = () => createIcons({ icons: { Coffee, Eye, EyeOff, ArrowRight, Menu, House, Users, LogOut, ShieldCheck, Plus, Pencil, Lock, ShoppingCart, Package } });
 actualizarIconos();
 document.querySelectorAll('[data-ver-clave]').forEach(boton => boton.addEventListener('click', () => {
     const campo = document.getElementById(boton.dataset.verClave);

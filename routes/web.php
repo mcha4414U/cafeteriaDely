@@ -6,6 +6,7 @@ use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/catalogos.php';
+require __DIR__.'/inventario.php';
 
 Route::get('/', fn () => redirect()->route(auth()->check() ? 'inicio' : 'login'));
 Route::middleware('guest')->group(function () {
