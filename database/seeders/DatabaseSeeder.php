@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(RolesPermisosSeeder::class);
         // Catálogos mínimos; no crear cuentas con contraseñas predeterminadas.
         foreach (['Efectivo', 'QR', 'Transferencia', 'Tarjeta'] as $nombre) {
             DB::table('metodos_pago')->updateOrInsert(['nombre' => $nombre], [
