@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\IniciarSesionRequest;
+use App\Services\ServicioInstalacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -12,7 +13,7 @@ class AutenticacionController extends Controller
 {
     public function formulario()
     {
-        return view('autenticacion.ingresar');
+        return view('autenticacion.ingresar', ['puedeCrearAdministrador' => app(ServicioInstalacion::class)->disponible()]);
     }
 
     public function ingresar(IniciarSesionRequest $solicitud)
@@ -27,6 +28,16 @@ class AutenticacionController extends Controller
         }
         RateLimiter::clear($clave);
         $solicitud->session()->regenerate();
+
+        if ($solicitud->user()->puedeConsultarAvisosStock()) {
+            $solicitud->session()->forget('url.intended');
+            return redirect()->route('pos.index');
+        }
+
+        if ($solicitud->user()->soloPreparaciones()) {
+            $solicitud->session()->forget('url.intended');
+            return redirect()->route('pedidos.index');
+        }
 
         return redirect()->intended(route('inicio'));
     }

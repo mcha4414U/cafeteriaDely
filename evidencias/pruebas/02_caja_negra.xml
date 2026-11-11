@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\phpunit.xml" tests="5" assertions="43" errors="0" failures="0" skipped="0" time="13.304246">
+    <testsuite name="Feature" tests="5" assertions="43" errors="0" failures="0" skipped="0" time="13.304246">
+      <testsuite name="Tests\Feature\AutenticacionTest" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\AutenticacionTest.php" tests="2" assertions="12" errors="0" failures="0" skipped="0" time="11.411368">
+        <testcase name="test_inicio_de_sesion_y_salida" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\AutenticacionTest.php" line="46" class="Tests\Feature\AutenticacionTest" classname="Tests.Feature.AutenticacionTest" assertions="9" time="10.714282"/>
+        <testcase name="test_contrasena_incorrecta_no_autentica" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\AutenticacionTest.php" line="58" class="Tests\Feature\AutenticacionTest" classname="Tests.Feature.AutenticacionTest" assertions="3" time="0.697086"/>
+      </testsuite>
+      <testsuite name="Tests\Feature\CatalogosTest" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\CatalogosTest.php" tests="2" assertions="17" errors="0" failures="0" skipped="0" time="1.161050">
+        <testcase name="test_producto_sin_campos_obligatorios_es_rechazado" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\CatalogosTest.php" line="55" class="Tests\Feature\CatalogosTest" classname="Tests.Feature.CatalogosTest" assertions="7" time="0.654796"/>
+        <testcase name="test_filtros_stock_y_categoria" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\CatalogosTest.php" line="170" class="Tests\Feature\CatalogosTest" classname="Tests.Feature.CatalogosTest" assertions="10" time="0.506254"/>
+      </testsuite>
+      <testsuite name="Tests\Feature\ComprasInventarioTest" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\ComprasInventarioTest.php" tests="1" assertions="14" errors="0" failures="0" skipped="0" time="0.731828">
+        <testcase name="test_compra_calcula_total_y_actualiza_stock_con_movimiento" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\ComprasInventarioTest.php" line="55" class="Tests\Feature\ComprasInventarioTest" classname="Tests.Feature.ComprasInventarioTest" assertions="14" time="0.731828"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

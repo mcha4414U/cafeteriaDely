@@ -2,14 +2,20 @@
 
 use App\Http\Controllers\AutenticacionController;
 use App\Http\Controllers\ContrasenaController;
+use App\Http\Controllers\InstalacionController;
+use App\Http\Controllers\PuntoVentaController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/catalogos.php';
 require __DIR__.'/inventario.php';
+require __DIR__.'/operaciones.php';
 
-Route::get('/', fn () => redirect()->route(auth()->check() ? 'inicio' : 'login'));
+Route::redirect('/', '/ingresar');
+
 Route::middleware('guest')->group(function () {
+    Route::get('/crear-administrador', [InstalacionController::class, 'formulario'])->name('instalacion.formulario');
+    Route::post('/crear-administrador', [InstalacionController::class, 'guardar'])->middleware('throttle:5,1')->name('instalacion.guardar');
     Route::get('/ingresar', [AutenticacionController::class, 'formulario'])->name('login');
     Route::post('/ingresar', [AutenticacionController::class, 'ingresar'])->middleware('throttle:20,1')->name('sesion.ingresar');
     Route::get('/recuperar-contrasena', [ContrasenaController::class, 'solicitar'])->name('password.request');
@@ -18,7 +24,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/restablecer-contrasena', [ContrasenaController::class, 'restablecer'])->middleware('throttle:10,1')->name('password.update');
 });
 Route::middleware(['auth', 'activo', 'auth.session'])->group(function () {
-    Route::get('/inicio', fn () => view('inicio'))->name('inicio');
+
+
+    Route::get('/punto-de-venta', [PuntoVentaController::class, 'index'])->middleware('permiso:pos.usar')->name('pos.index');
+    Route::get('/inicio', [\App\Http\Controllers\ResumenController::class,'inicio'])->name('inicio');
     Route::post('/salir', [AutenticacionController::class, 'salir'])->name('sesion.salir');
     Route::middleware('permiso:usuarios.gestionar')->group(function () {
         Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');

@@ -1,0 +1,24 @@
+PHPUnit 11.5.56 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.2.12
+Configuration: C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\phpunit.xml
+
+
+   PASS  Tests\Feature\ComprasInventarioTest
+  ✓ reintentar no duplica compra ni stock                                                                        3.65s  
+  ✓ misma clave con datos distintos se rechaza                                                                   0.33s  
+  ✓ limite stock no guarda compra parcial                                                                        0.29s  
+  ✓ total excesivo se rechaza                                                                                    0.24s  
+
+  Tests:    4 passed (18 assertions)
+  Duration: 5.90s
+
+Time: 00:04.704, Memory: 48.00 MB
+
+Compras Inventario (Tests\Feature\ComprasInventario)
+ ✔ CB-01: compra existente con la misma huella se reutiliza
+ ✔ CB-02: compra existente con huella distinta se rechaza
+ ✔ CB-03: rama que rechaza superar el stock máximo
+ ✔ CB-04: rama que rechaza superar el total máximo
+
+OK (4 tests, 18 assertions)

@@ -24,6 +24,29 @@ class Usuario extends User
         return $this->estado && $this->roles()->whereHas('permisos', fn ($consulta) => $consulta->where('nombre', $permiso))->exists();
     }
 
+    public function puedeVerPreparaciones(): bool
+    {
+        return $this->tienePermiso('preparaciones.gestionar') || $this->tienePermiso('pos.usar') || $this->tienePermiso('ventas.todas');
+    }
+
+    public function soloPreparaciones(): bool
+    {
+        return $this->tienePermiso('preparaciones.gestionar')
+            && ! $this->tienePermiso('pos.usar') && ! $this->tienePermiso('ventas.todas');
+    }
+
+    public function esCajero(): bool
+    {
+        return $this->estado
+            && $this->roles()->where('nombre', 'Cajero')->exists()
+            && ! $this->roles()->where('nombre', 'Administrador')->exists();
+    }
+
+    public function puedeConsultarAvisosStock(): bool
+    {
+        return $this->esCajero() && $this->tienePermiso('pos.usar');
+    }
+
     public function sendPasswordResetNotification($token): void
     {
         $this->notify(new RestablecerContrasena($token));

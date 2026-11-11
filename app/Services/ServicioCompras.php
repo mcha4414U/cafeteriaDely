@@ -17,6 +17,7 @@ class ServicioCompras
         $lineas = collect($datos['detalles'])->sortBy('producto_id')->map(fn ($linea) => [
             'producto_id' => (int) $linea['producto_id'], 'cantidad' => bcadd((string) $linea['cantidad'], '0', 3),
             'costo_unitario' => bcadd((string) $linea['costo_unitario'], '0', 2),
+            ...(($linea['modo_cantidad'] ?? 'base') === 'envases' ? ['modo_cantidad' => 'envases', 'contenido_esperado' => $linea['contenido_esperado'] ?? null] : []),
         ])->values()->all();
         $huella = hash('sha256', json_encode([(int) $datos['proveedor_id'], $datos['fecha'], $datos['observaciones'] ?? null, $lineas], JSON_THROW_ON_ERROR));
 
@@ -44,7 +45,12 @@ class ServicioCompras
                 if (! $producto || ! $producto->estado) {
                     throw ValidationException::withMessages(['detalles' => 'Uno de los productos ya no está disponible.']);
                 }
-                $nuevoStock = bcadd($producto->stock_actual, $linea['cantidad'], 3);
+                $porEnvases = ($linea['modo_cantidad'] ?? 'base') === 'envases';
+                if ($porEnvases && (! $producto->tienePresentacion() || ! isset($linea['contenido_esperado']) || bccomp($producto->contenido_por_unidad, (string) $linea['contenido_esperado'], 3) !== 0)) {
+                    throw ValidationException::withMessages(['detalles' => 'La presentación cambió o no está configurada. Recarga la compra y revisa el contenido por envase.']);
+                }
+                $cantidadStock = $porEnvases ? \App\Support\PresentacionInsumo::total($producto->contenido_por_unidad, $linea['cantidad']) : $linea['cantidad'];
+                $nuevoStock = bcadd($producto->stock_actual, $cantidadStock, 3);
                 if (bccomp($nuevoStock, '999999999.999', 3) > 0) {
                     throw ValidationException::withMessages(['detalles' => 'La compra supera el stock máximo permitido para '.$producto->nombre.'.']);
                 }
@@ -54,7 +60,7 @@ class ServicioCompras
                 if (bccomp($total, '9999999999.99', 2) > 0) {
                     throw ValidationException::withMessages(['detalles' => 'El total supera el importe máximo permitido.']);
                 }
-                $preparadas[] = compact('producto', 'linea', 'subtotal', 'nuevoStock');
+                $preparadas[] = compact('producto', 'linea', 'subtotal', 'nuevoStock', 'cantidadStock', 'porEnvases');
             }
             $compra = Compra::create([
                 'proveedor_id' => $proveedor->id, 'usuario_id' => $usuarioId, 'numero' => 'TEMP-'.$datos['clave_idempotencia'],
@@ -64,16 +70,24 @@ class ServicioCompras
             ]);
             $compra->update(['numero' => 'C-'.str_pad((string) $compra->id, 6, '0', STR_PAD_LEFT)]);
             foreach ($preparadas as $preparada) {
-                ['producto' => $producto,'linea' => $linea,'subtotal' => $subtotal,'nuevoStock' => $nuevoStock] = $preparada;
-                $compra->detalles()->create($linea + ['subtotal' => $subtotal, 'nombre_producto' => $producto->nombre, 'unidad_medida' => $producto->unidad_medida]);
+                ['producto' => $producto,'linea' => $linea,'subtotal' => $subtotal,'nuevoStock' => $nuevoStock, 'cantidadStock' => $cantidadStock, 'porEnvases' => $porEnvases] = $preparada;
+                unset($linea['modo_cantidad'], $linea['contenido_esperado']);
+                $compra->detalles()->create($linea + ['subtotal' => $subtotal, 'nombre_producto' => $producto->nombre, 'unidad_medida' => $producto->unidad_medida,
+                    'cantidad_stock' => $cantidadStock, 'contenido_por_unidad' => $porEnvases ? $producto->contenido_por_unidad : null,
+                    'presentacion' => $porEnvases ? ($producto->presentacion ?: 'envase') : null]);
                 MovimientoInventario::create([
                     'producto_id' => $producto->id, 'usuario_id' => $usuarioId, 'compra_id' => $compra->id, 'tipo' => 'entrada_compra',
-                    'cantidad' => $linea['cantidad'], 'stock_anterior' => $producto->stock_actual, 'stock_nuevo' => $nuevoStock,
+                    'cantidad' => $cantidadStock, 'stock_anterior' => $producto->stock_actual, 'stock_nuevo' => $nuevoStock,
                     'motivo' => 'Recepción de compra '.$compra->numero, 'fecha' => now(),
                 ]);
                 $producto->stock_actual = $nuevoStock;
-                $producto->precio_compra = $linea['costo_unitario'];
+                if ($porEnvases) {
+                    $producto->precio_compra_presentacion = $linea['costo_unitario'];
+                } else {
+                    $producto->precio_compra = $linea['costo_unitario'];
+                }
                 $producto->save();
+                app(ServicioAlertas::class)->sincronizar($producto);
             }
 
             return $compra;

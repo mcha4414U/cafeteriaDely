@@ -11,6 +11,8 @@ class Cliente extends Model
 
     protected $table = 'clientes';
 
+    protected $hidden = ['google_id'];
+
     protected $fillable = ['nombre', 'telefono', 'direccion', 'observaciones', 'estado'];
 
     protected function casts(): array

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\phpunit.xml" tests="4" assertions="18" errors="0" failures="0" skipped="0" time="4.511524">
+    <testsuite name="Feature" tests="4" assertions="18" errors="0" failures="0" skipped="0" time="4.511524">
+      <testsuite name="Tests\Feature\ComprasInventarioTest" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\ComprasInventarioTest.php" tests="4" assertions="18" errors="0" failures="0" skipped="0" time="4.511524">
+        <testcase name="test_reintentar_no_duplica_compra_ni_stock" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\ComprasInventarioTest.php" line="71" class="Tests\Feature\ComprasInventarioTest" classname="Tests.Feature.ComprasInventarioTest" assertions="7" time="3.646304"/>
+        <testcase name="test_misma_clave_con_datos_distintos_se_rechaza" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\ComprasInventarioTest.php" line="84" class="Tests\Feature\ComprasInventarioTest" classname="Tests.Feature.ComprasInventarioTest" assertions="3" time="0.328210"/>
+        <testcase name="test_limite_stock_no_guarda_compra_parcial" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\ComprasInventarioTest.php" line="119" class="Tests\Feature\ComprasInventarioTest" classname="Tests.Feature.ComprasInventarioTest" assertions="5" time="0.293406"/>
+        <testcase name="test_total_excesivo_se_rechaza" file="C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\tests\Feature\ComprasInventarioTest.php" line="130" class="Tests\Feature\ComprasInventarioTest" classname="Tests.Feature.ComprasInventarioTest" assertions="3" time="0.243604"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

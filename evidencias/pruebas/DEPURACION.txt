@@ -1,0 +1,39 @@
+REGISTRO DE DEPURACIÓN — CAFETERÍA DELY
+
+Primera ejecución:
+php artisan test --colors=never --log-junit=evidencias/pruebas/01_phpunit_completo.xml
+
+Resultado real:
+Tests: 1 failed, 90 passed (684 assertions)
+Duration: 45.67s
+
+Incidencia: preparación de la nueva prueba unitaria PU-03.
+Archivo: tests/Unit/ReglasDominioTest.php, línea 54 de la versión inicial.
+Método: test_etiquetas_de_movimientos_sin_base_de_datos.
+Mensaje: Call to a member function connection() on null.
+Esperado: comprobar las cinco ramas de MovimientoInventario::etiquetaTipo sin BD.
+Obtenido: Error antes de ejecutar las aserciones de etiquetas.
+
+Causa:
+new MovimientoInventario(['tipo' => $tipo]) utiliza asignación masiva.
+Este modelo tiene protected $guarded = ['id']; Eloquent consulta qué columnas
+son asignables mediante GuardsAttributes::isGuardableColumn, que necesita
+un resolvedor de conexión. Una prueba unitaria pura no inicia Laravel ni
+configura ese resolvedor.
+
+Clasificación:
+Error en la preparación del test recién agregado. No demuestra un error
+funcional del sistema ni de MovimientoInventario::etiquetaTipo.
+
+Corrección mínima prevista:
+Instanciar el modelo vacío y asignar únicamente su atributo tipo.
+No arrancar Laravel, no añadir conexión a BD y no modificar el modelo.
+
+Se conserva la evidencia inicial íntegra en 01_phpunit_completo.txt y .xml.
+El resultado posterior se documentará con las nuevas ejecuciones.
+
+RESULTADO POSTERIOR CONFIRMADO:
+Corrección aplicada únicamente al fixture de PU-03.
+Unitarias: 3 passed (21 assertions), Duration: 1.56s.
+Suite completa final: 91 passed (689 assertions), Duration: 36.29s.
+No se detectaron errores funcionales en los casos de prueba ejecutados.

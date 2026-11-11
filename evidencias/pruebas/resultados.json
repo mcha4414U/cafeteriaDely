@@ -1,0 +1,1049 @@
+{
+    "fecha": "2026-09-15T21:28:28-04:00",
+    "entorno": {
+        "php": "8.2.12",
+        "laravel": "12.69.2",
+        "phpunit": "11.5.56",
+        "sqlite": "3.39.2",
+        "testing": "sqlite :memory:",
+        "env_testing_existe": false,
+        "cobertura_instrumentada": false
+    },
+    "archivos_modificados": [
+        "tests/Feature/AutenticacionTest.php",
+        "tests/Feature/CatalogosTest.php",
+        "tests/Feature/ComprasInventarioTest.php",
+        "tests/TestCase.php"
+    ],
+    "archivos_eliminados": [],
+    "tablas_reales_sin_cambios": {
+        "productos": true,
+        "compras": true,
+        "detalle_compras": true,
+        "movimientos_inventario": true,
+        "usuarios": true,
+        "clientes": true,
+        "roles": true,
+        "permisos": true,
+        "rol_usuario": true,
+        "ventas": true,
+        "detalle_ventas": true
+    },
+    "ejecuciones": {
+        "01_phpunit_completo": {
+            "ejecutadas": 91,
+            "aprobadas": 90,
+            "fallidas": 1,
+            "omitidas": 0,
+            "aserciones": 684,
+            "casos": [
+                {
+                    "clase": "Tests\\Unit\\ExampleTest",
+                    "metodo": "test_that_true_is_true",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Unit\\ReglasDominioTest",
+                    "metodo": "test_formato_de_cantidades_aislado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Unit\\ReglasDominioTest",
+                    "metodo": "test_estado_de_stock_sin_base_de_datos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Unit\\ReglasDominioTest",
+                    "metodo": "test_etiquetas_de_movimientos_sin_base_de_datos",
+                    "estado": "FALLIDO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AdministradorInicialTest",
+                    "metodo": "test_crea_un_administrador_sin_clave_predeterminada",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_visitante_no_accede_a_usuarios",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_formulario_de_acceso_esta_en_espanol",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_inicio_de_sesion_y_salida",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_contrasena_incorrecta_no_autentica",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_cuenta_inactiva_no_autentica",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_se_limita_el_numero_de_intentos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_cajero_no_accede_ni_modifica_usuarios",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_administrador_crea_usuario_con_contrasena_cifrada",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_no_se_desactiva_el_ultimo_administrador",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_no_se_degrada_el_ultimo_administrador",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_se_puede_desactivar_otro_usuario",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_sesion_de_cuenta_desactivada_se_rechaza",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_validaciones_de_usuario",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_recuperacion_y_token_de_un_solo_uso",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_token_invalido_no_cambia_contrasena",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_correo_desconocido_recibe_respuesta_generica",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_no_hay_registro_publico",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_producto_sin_campos_obligatorios_es_rechazado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_listados_y_formularios_funcionan",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_categoria_crud_y_restauracion",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_categoria_con_productos_no_se_desactiva_ni_archiva",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_cliente_generico_esta_protegido",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_clientes_y_proveedores_crud",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_producto_registra_stock_inicial_y_movimiento",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_editar_precio_no_modifica_stock",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_archivar_y_restaurar_producto",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_no_restaura_producto_con_categoria_archivada",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_rechaza_valores_negativos_codigo_repetido_y_categoria_inactiva",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_filtros_stock_y_categoria",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_imagen_valida_se_guarda_y_sirve_con_autenticacion",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_rechaza_archivos_no_permitidos_y_grandes",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_cajero_consulta_productos_y_registra_clientes_sin_editar_catalogos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_ajuste_stock_registra_diferencia_y_rechaza_formulario_desactualizado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_cajero_no_puede_ajustar_stock",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_texto_se_escapa_al_mostrar_catalogos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_pantallas_de_compras_e_inventario",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_compra_calcula_total_y_actualiza_stock_con_movimiento",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_reintentar_no_duplica_compra_ni_stock",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_misma_clave_con_datos_distintos_se_rechaza",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_rechaza_cantidades_invalidas_y_productos_repetidos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_no_compra_proveedor_o_producto_inactivo",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_limite_stock_no_guarda_compra_parcial",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_total_excesivo_se_rechaza",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_fallo_de_movimiento_revierte_toda_la_compra",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_historial_conserva_nombres_y_productos_archivados",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_entradas_y_salidas_no_se_cancelan",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_filtros_fecha_y_compra",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_cajero_no_puede_ver_ni_registrar_compras",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\EsquemaTest",
+                    "metodo": "test_los_catalogos_iniciales_no_se_duplican",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\EsquemaTest",
+                    "metodo": "test_no_se_permite_un_producto_con_categoria_inexistente",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\EsquemaTest",
+                    "metodo": "test_no_se_elimina_una_categoria_con_productos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\EsquemaTest",
+                    "metodo": "test_no_se_duplican_alertas_activas",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ExampleTest",
+                    "metodo": "test_the_application_returns_a_successful_response",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_sin_credenciales_no_rompe_pagina_login_ni_callback",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_redireccion_real_de_socialite_incluye_state_y_no_el_secreto",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_callback_crea_solo_cliente_y_no_concede_acceso_administrativo",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_reutiliza_google_id_sin_duplicar_ni_sobrescribir_el_catalogo",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_no_asocia_clientes_solo_por_nombre",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_no_reactiva_clientes_inactivos_archivados_o_genericos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_state_invalido_cancelacion_y_error_de_google_no_autentican",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_cerrar_sesion_cliente_no_cierra_sesion_administrativa",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\InstalacionWebTest",
+                    "metodo": "test_muestra_opcion_y_crea_administrador_sin_cuenta_previa",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\InstalacionWebTest",
+                    "metodo": "test_no_reabre_instalacion_con_cuenta_desactivada",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\InstalacionWebTest",
+                    "metodo": "test_no_reabre_instalacion_cerrada_aunque_no_haya_usuarios",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\InstalacionWebTest",
+                    "metodo": "test_valida_correo_y_contrasena_y_no_crea_datos_parciales",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\PaginaClienteTest",
+                    "metodo": "test_menu_publico_filtra_tipos_estados_y_muestra_datos_reales_sin_escribir",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\PaginaClienteTest",
+                    "metodo": "test_imagenes_publicas_solo_para_productos_visibles_y_reutilizan_ambos_discos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\PaginaClienteTest",
+                    "metodo": "test_stock_se_presenta_sin_ceros_y_no_cambia_valores_ni_precios",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\PaginaClienteTest",
+                    "metodo": "test_panel_permanece_privado_y_login_disponible",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_crear_tipos_sin_categoria_ni_codigo_y_stock_auditado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_guardar_editar_receta_sin_duplicar_y_sin_mover_stock",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_rechaza_duplicados_unidades_incorrectas_y_guarda_receta_anterior",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_rechaza_ingredientes_de_venta_inactivos_y_al_mismo_producto",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_no_cambia_unidad_o_tipo_de_insumo_usado_en_receta",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_pos_filtra_insumos_inactivos_archivados_y_conserva_stock",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_cajero_puede_ver_pos_pero_no_editar_recetas",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_editar_stock_exige_motivo_y_rechaza_conteo_desactualizado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_reemplaza_imagen_publica_y_conserva_compatibilidad_privada",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_envia_texto_con_bearer_y_json_correctos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_error_de_meta_se_registra_sin_cuerpo_ni_credenciales",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_configuracion_o_destinatario_invalido_no_envian_solicitudes",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_fallo_de_conexion_no_se_reintenta_automaticamente",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_respuesta_exitosa_sin_identificador_no_se_presenta_como_envio",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_rutas_exigen_autenticacion",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_pagina_no_envia_y_post_usa_solo_el_destinatario_configurado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_error_del_envio_se_muestra_mediante_validacion_laravel",
+                    "estado": "APROBADO"
+                }
+            ]
+        },
+        "02_caja_negra": {
+            "ejecutadas": 5,
+            "aprobadas": 5,
+            "fallidas": 0,
+            "omitidas": 0,
+            "aserciones": 43,
+            "casos": [
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_inicio_de_sesion_y_salida",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_contrasena_incorrecta_no_autentica",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_producto_sin_campos_obligatorios_es_rechazado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_filtros_stock_y_categoria",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_compra_calcula_total_y_actualiza_stock_con_movimiento",
+                    "estado": "APROBADO"
+                }
+            ]
+        },
+        "03_caja_blanca": {
+            "ejecutadas": 4,
+            "aprobadas": 4,
+            "fallidas": 0,
+            "omitidas": 0,
+            "aserciones": 18,
+            "casos": [
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_reintentar_no_duplica_compra_ni_stock",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_misma_clave_con_datos_distintos_se_rechaza",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_limite_stock_no_guarda_compra_parcial",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_total_excesivo_se_rechaza",
+                    "estado": "APROBADO"
+                }
+            ]
+        },
+        "04_unitarias": {
+            "ejecutadas": 3,
+            "aprobadas": 3,
+            "fallidas": 0,
+            "omitidas": 0,
+            "aserciones": 21,
+            "casos": [
+                {
+                    "clase": "Tests\\Unit\\ReglasDominioTest",
+                    "metodo": "test_formato_de_cantidades_aislado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Unit\\ReglasDominioTest",
+                    "metodo": "test_estado_de_stock_sin_base_de_datos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Unit\\ReglasDominioTest",
+                    "metodo": "test_etiquetas_de_movimientos_sin_base_de_datos",
+                    "estado": "APROBADO"
+                }
+            ]
+        },
+        "05_phpunit_final": {
+            "ejecutadas": 91,
+            "aprobadas": 91,
+            "fallidas": 0,
+            "omitidas": 0,
+            "aserciones": 689,
+            "casos": [
+                {
+                    "clase": "Tests\\Unit\\ExampleTest",
+                    "metodo": "test_that_true_is_true",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Unit\\ReglasDominioTest",
+                    "metodo": "test_formato_de_cantidades_aislado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Unit\\ReglasDominioTest",
+                    "metodo": "test_estado_de_stock_sin_base_de_datos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Unit\\ReglasDominioTest",
+                    "metodo": "test_etiquetas_de_movimientos_sin_base_de_datos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AdministradorInicialTest",
+                    "metodo": "test_crea_un_administrador_sin_clave_predeterminada",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_visitante_no_accede_a_usuarios",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_formulario_de_acceso_esta_en_espanol",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_inicio_de_sesion_y_salida",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_contrasena_incorrecta_no_autentica",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_cuenta_inactiva_no_autentica",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_se_limita_el_numero_de_intentos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_cajero_no_accede_ni_modifica_usuarios",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_administrador_crea_usuario_con_contrasena_cifrada",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_no_se_desactiva_el_ultimo_administrador",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_no_se_degrada_el_ultimo_administrador",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_se_puede_desactivar_otro_usuario",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_sesion_de_cuenta_desactivada_se_rechaza",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_validaciones_de_usuario",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_recuperacion_y_token_de_un_solo_uso",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_token_invalido_no_cambia_contrasena",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_correo_desconocido_recibe_respuesta_generica",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\AutenticacionTest",
+                    "metodo": "test_no_hay_registro_publico",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_producto_sin_campos_obligatorios_es_rechazado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_listados_y_formularios_funcionan",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_categoria_crud_y_restauracion",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_categoria_con_productos_no_se_desactiva_ni_archiva",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_cliente_generico_esta_protegido",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_clientes_y_proveedores_crud",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_producto_registra_stock_inicial_y_movimiento",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_editar_precio_no_modifica_stock",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_archivar_y_restaurar_producto",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_no_restaura_producto_con_categoria_archivada",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_rechaza_valores_negativos_codigo_repetido_y_categoria_inactiva",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_filtros_stock_y_categoria",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_imagen_valida_se_guarda_y_sirve_con_autenticacion",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_rechaza_archivos_no_permitidos_y_grandes",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_cajero_consulta_productos_y_registra_clientes_sin_editar_catalogos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_ajuste_stock_registra_diferencia_y_rechaza_formulario_desactualizado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_cajero_no_puede_ajustar_stock",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\CatalogosTest",
+                    "metodo": "test_texto_se_escapa_al_mostrar_catalogos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_pantallas_de_compras_e_inventario",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_compra_calcula_total_y_actualiza_stock_con_movimiento",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_reintentar_no_duplica_compra_ni_stock",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_misma_clave_con_datos_distintos_se_rechaza",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_rechaza_cantidades_invalidas_y_productos_repetidos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_no_compra_proveedor_o_producto_inactivo",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_limite_stock_no_guarda_compra_parcial",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_total_excesivo_se_rechaza",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_fallo_de_movimiento_revierte_toda_la_compra",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_historial_conserva_nombres_y_productos_archivados",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_entradas_y_salidas_no_se_cancelan",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_filtros_fecha_y_compra",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ComprasInventarioTest",
+                    "metodo": "test_cajero_no_puede_ver_ni_registrar_compras",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\EsquemaTest",
+                    "metodo": "test_los_catalogos_iniciales_no_se_duplican",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\EsquemaTest",
+                    "metodo": "test_no_se_permite_un_producto_con_categoria_inexistente",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\EsquemaTest",
+                    "metodo": "test_no_se_elimina_una_categoria_con_productos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\EsquemaTest",
+                    "metodo": "test_no_se_duplican_alertas_activas",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\ExampleTest",
+                    "metodo": "test_the_application_returns_a_successful_response",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_sin_credenciales_no_rompe_pagina_login_ni_callback",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_redireccion_real_de_socialite_incluye_state_y_no_el_secreto",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_callback_crea_solo_cliente_y_no_concede_acceso_administrativo",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_reutiliza_google_id_sin_duplicar_ni_sobrescribir_el_catalogo",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_no_asocia_clientes_solo_por_nombre",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_no_reactiva_clientes_inactivos_archivados_o_genericos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_state_invalido_cancelacion_y_error_de_google_no_autentican",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\GoogleClienteTest",
+                    "metodo": "test_cerrar_sesion_cliente_no_cierra_sesion_administrativa",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\InstalacionWebTest",
+                    "metodo": "test_muestra_opcion_y_crea_administrador_sin_cuenta_previa",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\InstalacionWebTest",
+                    "metodo": "test_no_reabre_instalacion_con_cuenta_desactivada",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\InstalacionWebTest",
+                    "metodo": "test_no_reabre_instalacion_cerrada_aunque_no_haya_usuarios",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\InstalacionWebTest",
+                    "metodo": "test_valida_correo_y_contrasena_y_no_crea_datos_parciales",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\PaginaClienteTest",
+                    "metodo": "test_menu_publico_filtra_tipos_estados_y_muestra_datos_reales_sin_escribir",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\PaginaClienteTest",
+                    "metodo": "test_imagenes_publicas_solo_para_productos_visibles_y_reutilizan_ambos_discos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\PaginaClienteTest",
+                    "metodo": "test_stock_se_presenta_sin_ceros_y_no_cambia_valores_ni_precios",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\PaginaClienteTest",
+                    "metodo": "test_panel_permanece_privado_y_login_disponible",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_crear_tipos_sin_categoria_ni_codigo_y_stock_auditado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_guardar_editar_receta_sin_duplicar_y_sin_mover_stock",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_rechaza_duplicados_unidades_incorrectas_y_guarda_receta_anterior",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_rechaza_ingredientes_de_venta_inactivos_y_al_mismo_producto",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_no_cambia_unidad_o_tipo_de_insumo_usado_en_receta",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_pos_filtra_insumos_inactivos_archivados_y_conserva_stock",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_cajero_puede_ver_pos_pero_no_editar_recetas",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_editar_stock_exige_motivo_y_rechaza_conteo_desactualizado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\RecetasPosTest",
+                    "metodo": "test_reemplaza_imagen_publica_y_conserva_compatibilidad_privada",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_envia_texto_con_bearer_y_json_correctos",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_error_de_meta_se_registra_sin_cuerpo_ni_credenciales",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_configuracion_o_destinatario_invalido_no_envian_solicitudes",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_fallo_de_conexion_no_se_reintenta_automaticamente",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_respuesta_exitosa_sin_identificador_no_se_presenta_como_envio",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_rutas_exigen_autenticacion",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_pagina_no_envia_y_post_usa_solo_el_destinatario_configurado",
+                    "estado": "APROBADO"
+                },
+                {
+                    "clase": "Tests\\Feature\\WhatsAppTest",
+                    "metodo": "test_error_del_envio_se_muestra_mediante_validacion_laravel",
+                    "estado": "APROBADO"
+                }
+            ]
+        }
+    }
+}

@@ -1,11 +1,17 @@
 import './bootstrap';
+document.addEventListener('click', (event) => { if (event.target.closest('[data-imprimir]')) window.print(); });
 import './compras';
+import './presentaciones';
+import './producto-formulario';
+import './notificaciones-stock';
+import './recetas';
+import './pos';
 import 'bootstrap';
 import 'admin-lte';
-import { createIcons, Coffee, Eye, EyeOff, ArrowRight, Menu, House, Users, LogOut, ShieldCheck, Plus, Pencil, Lock, ShoppingCart, Package } from 'lucide';
+import { createIcons, Coffee, Eye, EyeOff, ArrowRight, Menu, House, Users, LogOut, ShieldCheck, Plus, Pencil, Lock, ShoppingCart, Package, ArrowLeft, Receipt, Bell } from 'lucide';
 import Swal from 'sweetalert2';
 import DataTable from 'datatables.net-bs5';
-const actualizarIconos = () => createIcons({ icons: { Coffee, Eye, EyeOff, ArrowRight, Menu, House, Users, LogOut, ShieldCheck, Plus, Pencil, Lock, ShoppingCart, Package } });
+const actualizarIconos = () => createIcons({ icons: { Coffee, Eye, EyeOff, ArrowRight, Menu, House, Users, LogOut, ShieldCheck, Plus, Pencil, Lock, ShoppingCart, Package, ArrowLeft, Receipt, Bell } });
 actualizarIconos();
 document.querySelectorAll('[data-ver-clave]').forEach(boton => boton.addEventListener('click', () => {
     const campo = document.getElementById(boton.dataset.verClave);
@@ -20,7 +26,7 @@ document.querySelectorAll('[data-confirmar]').forEach(formulario => formulario.a
 }));
 document.querySelectorAll('.tabla-datos').forEach(tabla => new DataTable(tabla, {
     pageLength: 10, columnDefs: [{ targets: -1, orderable: false }], language: {
-        search: 'Buscar:', lengthMenu: 'Mostrar _MENU_ registros', info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+        decimal: ',', thousands: '.', search: 'Buscar:', lengthMenu: 'Mostrar _MENU_ registros', info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
         infoEmpty: 'Sin registros', infoFiltered: '(de _MAX_ registros)', zeroRecords: 'No se encontraron registros',
         emptyTable: 'Aún no hay registros', paginate: { first: 'Primero', last: 'Último', next: 'Siguiente', previous: 'Anterior' }
     }, drawCallback: actualizarIconos

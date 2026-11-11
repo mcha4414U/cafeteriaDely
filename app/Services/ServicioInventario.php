@@ -22,6 +22,7 @@ class ServicioInventario
             DB::table('movimientos_inventario')->insert(['producto_id' => $producto->id, 'usuario_id' => $usuarioId, 'tipo' => 'ajuste', 'cantidad' => $diferencia, 'stock_anterior' => $producto->stock_actual, 'stock_nuevo' => $datos['stock_nuevo'], 'motivo' => $datos['motivo'], 'fecha' => now(), 'created_at' => now(), 'updated_at' => now()]);
             $producto->stock_actual = $datos['stock_nuevo'];
             $producto->save();
+            app(ServicioAlertas::class)->sincronizar($producto);
         });
     }
 }

@@ -39,7 +39,7 @@ class CatalogosTest extends TestCase
 
     private function datosProducto(array $cambios = []): array
     {
-        return $cambios + ['nombre' => 'Cappuccino', 'codigo' => 'CAF-001', 'categoria_id' => Categoria::firstOrCreate(['nombre' => 'Café'], ['estado' => true])->id,
+        return $cambios + ['tipo' => 'venta', 'nombre' => 'Cappuccino', 'codigo' => 'CAF-001', 'categoria_id' => Categoria::firstOrCreate(['nombre' => 'Café'], ['estado' => true])->id,
             'precio_compra' => '8.50', 'precio_venta' => '16.00', 'stock_inicial' => '12.500', 'stock_minimo' => '5', 'unidad_medida' => 'unidad', 'estado' => 1];
     }
 
@@ -48,6 +48,57 @@ class CatalogosTest extends TestCase
         $this->post('/productos', $this->datosProducto())->assertRedirect('/productos');
 
         return Producto::firstOrFail();
+    }
+
+    public function test_costo_por_cantidad_se_recalcula_en_servidor_y_no_depende_del_stock_restante(): void
+    {
+        $datos = $this->datosProducto(['modo_costo'=>'cantidad','precio_total_compra'=>'120','stock_inicial'=>24,'precio_compra'=>'0.01']);
+        $this->post('/productos',$datos)->assertSessionHasNoErrors();
+        $p = Producto::firstOrFail();
+        $this->assertSame('5.00',$p->precio_compra);
+        $this->assertSame('unidad',$p->unidad_medida);
+        $this->postJson('/ventas', [
+            'clave_idempotencia'=>(string) \Illuminate\Support\Str::uuid(),
+            'cliente_id'=>Cliente::where('es_generico',true)->value('id'),
+            'metodo_pago_id'=>\Illuminate\Support\Facades\DB::table('metodos_pago')->where('nombre','Efectivo')->value('id'),
+            'descuento'=>0,'recibido'=>160,'detalles'=>[['producto_id'=>$p->id,'cantidad'=>10,'precio_esperado'=>16]],
+        ])->assertOk();
+        $this->assertSame('14.000',$p->fresh()->stock_actual);
+        $this->assertSame('5.00',$p->fresh()->precio_compra);
+        unset($datos['stock_inicial']);
+        $datos = array_replace($datos,['modo_costo'=>'unidad','stock_actual'=>14,'precio_compra'=>5]);
+        $this->get('/productos/'.$p->id.'/editar')->assertOk()->assertSee('Cantidad de compra para calcular el costo');
+        $this->put('/productos/'.$p->id,$datos)->assertSessionHasNoErrors();
+        $this->assertSame('5.00',$p->fresh()->precio_compra);
+        $this->put('/productos/'.$p->id,array_replace($datos,['modo_costo'=>'cantidad','precio_total_compra'=>144,'cantidad_compra'=>24]))->assertSessionHasNoErrors();
+        $this->assertSame('6.00',$p->fresh()->precio_compra);
+        $this->assertSame('14.000',$p->fresh()->stock_actual);
+        $this->assertDatabaseCount('movimientos_inventario',2);
+    }
+
+    public function test_costo_manual_y_validaciones_de_calculo(): void
+    {
+        $this->get('/productos/crear')->assertOk()->assertSee('>Cantidad</option>',false);
+        foreach ([['stock_inicial'=>0],['stock_inicial'=>-1],['precio_total_compra'=>-1],['precio_total_compra'=>''],['precio_total_compra'=>'9999999999.99','stock_inicial'=>'0.001'],['modo_costo'=>'invalido']] as $cambio) {
+            $this->postJson('/productos',$this->datosProducto($cambio + ['modo_costo'=>'cantidad','precio_total_compra'=>120,'stock_inicial'=>24]))->assertUnprocessable();
+        }
+        $this->assertDatabaseCount('productos',0);
+        $this->post('/productos',$this->datosProducto(['modo_costo'=>'unidad','precio_compra'=>'8.50']))->assertSessionHasNoErrors();
+        $this->assertSame('8.50',Producto::firstOrFail()->precio_compra);
+    }
+
+    #[\PHPUnit\Framework\Attributes\Group('caja-negra')]
+    #[\PHPUnit\Framework\Attributes\TestDox('CN-03: producto sin campos obligatorios es rechazado')]
+    public function test_producto_sin_campos_obligatorios_es_rechazado(): void
+    {
+        $datos = $this->datosProducto();
+        unset($datos['nombre'], $datos['precio_venta']);
+
+        $this->from('/productos/crear')->post('/productos', $datos)
+            ->assertRedirect('/productos/crear')
+            ->assertSessionHasErrors(['nombre', 'precio_venta']);
+        $this->assertDatabaseCount('productos', 0);
+        $this->assertDatabaseCount('movimientos_inventario', 0);
     }
 
     public function test_listados_y_formularios_funcionan(): void
@@ -115,11 +166,12 @@ class CatalogosTest extends TestCase
         $producto = $this->crearProducto();
         $datos = $this->datosProducto(['precio_venta' => '18.50']);
         unset($datos['stock_inicial']);
+        $datos['stock_actual'] = $producto->stock_actual;
         $this->put('/productos/'.$producto->id, $datos)->assertRedirect('/productos');
         $this->assertSame('18.50', $producto->fresh()->precio_venta);
         $this->assertSame('12.500', $producto->fresh()->stock_actual);
         $this->assertDatabaseCount('movimientos_inventario', 1);
-        $this->put('/productos/'.$producto->id, $datos + ['stock_actual' => 999])->assertSessionHasErrors('stock_actual');
+        $this->put('/productos/'.$producto->id, array_replace($datos, ['stock_actual' => 999]))->assertSessionHasErrors('stock_actual');
     }
 
     public function test_archivar_y_restaurar_producto(): void
@@ -150,6 +202,8 @@ class CatalogosTest extends TestCase
         $this->post('/productos', $this->datosProducto(['codigo' => 'OTRO']))->assertSessionHasErrors('categoria_id');
     }
 
+    #[\PHPUnit\Framework\Attributes\Group('caja-negra')]
+    #[\PHPUnit\Framework\Attributes\TestDox('CN-04: filtro de productos por stock y categoría')]
     public function test_filtros_stock_y_categoria(): void
     {
         $producto = $this->crearProducto();
@@ -163,11 +217,11 @@ class CatalogosTest extends TestCase
 
     public function test_imagen_valida_se_guarda_y_sirve_con_autenticacion(): void
     {
-        Storage::fake('local');
+        Storage::fake('public');
         $png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a6XcAAAAASUVORK5CYII=');
         $this->post('/productos', $this->datosProducto(['imagen' => UploadedFile::fake()->createWithContent('cafe.png', $png)]))->assertRedirect('/productos');
         $producto = Producto::firstOrFail();
-        Storage::disk('local')->assertExists($producto->imagen);
+        Storage::disk('public')->assertExists($producto->imagen);
         $this->get('/productos/'.$producto->id.'/imagen')->assertOk()->assertHeader('X-Content-Type-Options', 'nosniff');
         auth()->logout();
         $this->get('/productos/'.$producto->id.'/imagen')->assertRedirect('/ingresar');
@@ -175,7 +229,7 @@ class CatalogosTest extends TestCase
 
     public function test_rechaza_archivos_no_permitidos_y_grandes(): void
     {
-        Storage::fake('local');
+        Storage::fake('public');
         $this->post('/productos', $this->datosProducto(['imagen' => UploadedFile::fake()->createWithContent('malicioso.svg', '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>')]))->assertSessionHasErrors('imagen');
         $this->post('/productos', $this->datosProducto(['imagen' => UploadedFile::fake()->create('grande.jpg', 3000, 'image/jpeg')]))->assertSessionHasErrors('imagen');
         $this->assertDatabaseCount('productos', 0);

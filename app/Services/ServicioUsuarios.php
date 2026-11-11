@@ -15,6 +15,9 @@ class ServicioUsuarios
         return DB::transaction(function () use ($datos, $usuario) {
             // Serializar cambios de administradores para conservar al menos uno activo.
             $administrador = Rol::where('nombre', 'Administrador')->lockForUpdate()->firstOrFail();
+            if (! Rol::whereKey($datos['rol_id'])->whereIn('nombre', Rol::AUTORIZADOS)->exists()) {
+                throw ValidationException::withMessages(['rol_id' => 'Selecciona Administrador o Cajero.']);
+            }
             if ($usuario) {
                 $usuario = Usuario::lockForUpdate()->findOrFail($usuario->id);
                 $pierdeAcceso = ! $datos['estado'] || (int) $datos['rol_id'] !== $administrador->id;

@@ -1,0 +1,22 @@
+PHPUnit 11.5.56 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.2.12
+Configuration: C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\phpunit.xml
+
+
+   PASS  Tests\Unit\ReglasDominioTest
+  ✓ formato de cantidades aislado                                                                                0.06s  
+  ✓ estado de stock sin base de datos                                                                            0.12s  
+  ✓ etiquetas de movimientos sin base de datos
+
+  Tests:    3 passed (21 assertions)
+  Duration: 1.56s
+
+Time: 00:00.372, Memory: 16.00 MB
+
+Reglas Dominio (Tests\Unit\ReglasDominio)
+ ✔ PU-01: formato de cantidades sin redondear ni perder decimales
+ ✔ PU-02: clasificación de stock agotado, bajo y normal en sus límites
+ ✔ PU-03: etiquetas de movimientos y rama por defecto
+
+OK (3 tests, 21 assertions)

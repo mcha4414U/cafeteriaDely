@@ -1,0 +1,121 @@
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true                                                                                            0.04s  
+
+   PASS  Tests\Unit\ReglasDominioTest
+  ✓ formato de cantidades aislado                                                                                0.07s  
+  ✓ estado de stock sin base de datos                                                                            0.08s  
+  ✓ etiquetas de movimientos sin base de datos
+
+   PASS  Tests\Feature\AdministradorInicialTest
+  ✓ crea un administrador sin clave predeterminada                                                               1.82s  
+
+   PASS  Tests\Feature\AutenticacionTest
+  ✓ visitante no accede a usuarios                                                                               0.42s  
+  ✓ formulario de acceso esta en espanol                                                                         0.25s  
+  ✓ inicio de sesion y salida                                                                                    0.28s  
+  ✓ contrasena incorrecta no autentica                                                                           0.34s  
+  ✓ cuenta inactiva no autentica                                                                                 0.35s  
+  ✓ se limita el numero de intentos                                                                              1.23s  
+  ✓ cajero no accede ni modifica usuarios                                                                        0.24s  
+  ✓ administrador crea usuario con contrasena cifrada                                                            0.24s  
+  ✓ no se desactiva el ultimo administrador                                                                      0.15s  
+  ✓ no se degrada el ultimo administrador                                                                        0.13s  
+  ✓ se puede desactivar otro usuario                                                                             0.12s  
+  ✓ sesion de cuenta desactivada se rechaza                                                                      0.13s  
+  ✓ validaciones de usuario                                                                                      0.15s  
+  ✓ recuperacion y token de un solo uso                                                                          0.40s  
+  ✓ token invalido no cambia contrasena                                                                          0.55s  
+  ✓ correo desconocido recibe respuesta generica                                                                 0.36s  
+  ✓ no hay registro publico                                                                                      0.14s  
+
+   PASS  Tests\Feature\CatalogosTest
+  ✓ producto sin campos obligatorios es rechazado                                                                0.20s  
+  ✓ listados y formularios funcionan                                                                             0.37s  
+  ✓ categoria crud y restauracion                                                                                0.23s  
+  ✓ categoria con productos no se desactiva ni archiva                                                           0.18s  
+  ✓ cliente generico esta protegido                                                                              0.16s  
+  ✓ clientes y proveedores crud                                                                                  0.25s  
+  ✓ producto registra stock inicial y movimiento                                                                 0.20s  
+  ✓ editar precio no modifica stock                                                                              0.18s  
+  ✓ archivar y restaurar producto                                                                                0.23s  
+  ✓ no restaura producto con categoria archivada                                                                 0.18s  
+  ✓ rechaza valores negativos codigo repetido y categoria inactiva                                               0.18s  
+  ✓ filtros stock y categoria                                                                                    0.26s  
+  ✓ imagen valida se guarda y sirve con autenticacion                                                            0.36s  
+  ✓ rechaza archivos no permitidos y grandes                                                                     0.24s  
+  ✓ cajero consulta productos y registra clientes sin editar catalogos                                           0.47s  
+  ✓ ajuste stock registra diferencia y rechaza formulario desactualizado                                         0.18s  
+  ✓ cajero no puede ajustar stock                                                                                0.17s  
+  ✓ texto se escapa al mostrar catalogos                                                                         0.15s  
+
+   PASS  Tests\Feature\ComprasInventarioTest
+  ✓ pantallas de compras e inventario                                                                            0.34s  
+  ✓ compra calcula total y actualiza stock con movimiento                                                        0.30s  
+  ✓ reintentar no duplica compra ni stock                                                                        0.19s  
+  ✓ misma clave con datos distintos se rechaza                                                                   0.19s  
+  ✓ rechaza cantidades invalidas y productos repetidos                                                           0.21s  
+  ✓ no compra proveedor o producto inactivo                                                                      0.16s  
+  ✓ limite stock no guarda compra parcial                                                                        0.15s  
+  ✓ total excesivo se rechaza                                                                                    0.15s  
+  ✓ fallo de movimiento revierte toda la compra                                                                  0.16s  
+  ✓ historial conserva nombres y productos archivados                                                            0.25s  
+  ✓ entradas y salidas no se cancelan                                                                            0.19s  
+  ✓ filtros fecha y compra                                                                                       0.33s  
+  ✓ cajero no puede ver ni registrar compras                                                                     0.26s  
+
+   PASS  Tests\Feature\EsquemaTest
+  ✓ los catalogos iniciales no se duplican                                                                       0.19s  
+  ✓ no se permite un producto con categoria inexistente                                                          0.10s  
+  ✓ no se elimina una categoria con productos                                                                    0.09s  
+  ✓ no se duplican alertas activas                                                                               0.08s  
+
+   PASS  Tests\Feature\ExampleTest
+  ✓ the application returns a successful response                                                                0.11s  
+
+   PASS  Tests\Feature\GoogleClienteTest
+  ✓ sin credenciales no rompe pagina login ni callback                                                           0.15s  
+  ✓ redireccion real de socialite incluye state y no el secreto                                                  0.15s  
+  ✓ callback crea solo cliente y no concede acceso administrativo                                                0.26s  
+  ✓ reutiliza google id sin duplicar ni sobrescribir el catalogo                                                 0.10s  
+  ✓ no asocia clientes solo por nombre                                                                           0.09s  
+  ✓ no reactiva clientes inactivos archivados o genericos                                                        0.25s  
+  ✓ state invalido cancelacion y error de google no autentican                                                   0.18s  
+  ✓ cerrar sesion cliente no cierra sesion administrativa                                                       13.77s  
+
+   PASS  Tests\Feature\InstalacionWebTest
+  ✓ muestra opcion y crea administrador sin cuenta previa                                                        0.42s  
+  ✓ no reabre instalacion con cuenta desactivada                                                                 0.10s  
+  ✓ no reabre instalacion cerrada aunque no haya usuarios                                                        0.09s  
+  ✓ valida correo y contrasena y no crea datos parciales                                                         0.10s  
+
+   PASS  Tests\Feature\PaginaClienteTest
+  ✓ menu publico filtra tipos estados y muestra datos reales sin escribir                                        0.13s  
+  ✓ imagenes publicas solo para productos visibles y reutilizan ambos discos                                     0.31s  
+  ✓ stock se presenta sin ceros y no cambia valores ni precios                                                   0.52s  
+  ✓ panel permanece privado y login disponible                                                                   0.13s  
+
+   PASS  Tests\Feature\RecetasPosTest
+  ✓ crear tipos sin categoria ni codigo y stock auditado                                                         0.20s  
+  ✓ guardar editar receta sin duplicar y sin mover stock                                                         0.32s  
+  ✓ rechaza duplicados unidades incorrectas y guarda receta anterior                                             0.23s  
+  ✓ rechaza ingredientes de venta inactivos y al mismo producto                                                  0.21s  
+  ✓ no cambia unidad o tipo de insumo usado en receta                                                            0.24s  
+  ✓ pos filtra insumos inactivos archivados y conserva stock                                                     0.23s  
+  ✓ cajero puede ver pos pero no editar recetas                                                                  0.22s  
+  ✓ editar stock exige motivo y rechaza conteo desactualizado                                                    0.21s  
+  ✓ reemplaza imagen publica y conserva compatibilidad privada                                                   0.26s  
+
+   PASS  Tests\Feature\WhatsAppTest
+  ✓ envia texto con bearer y json correctos                                                                      0.21s  
+  ✓ error de meta se registra sin cuerpo ni credenciales                                                         0.08s  
+  ✓ configuracion o destinatario invalido no envian solicitudes                                                  0.07s  
+  ✓ fallo de conexion no se reintenta automaticamente                                                            0.09s  
+  ✓ respuesta exitosa sin identificador no se presenta como envio                                                0.10s  
+  ✓ rutas exigen autenticacion                                                                                   0.09s  
+  ✓ pagina no envia y post usa solo el destinatario configurado                                                  0.19s  
+  ✓ error del envio se muestra mediante validacion laravel                                                       0.11s  
+
+  Tests:    91 passed (689 assertions)
+  Duration: 36.29s
+

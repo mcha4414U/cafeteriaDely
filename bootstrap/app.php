@@ -13,8 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->validateCsrfTokens(except: ['integraciones/whatsapp/webhook']);
         $middleware->redirectGuestsTo('/ingresar');
-        $middleware->redirectUsersTo('/inicio');
+        $middleware->redirectUsersTo(fn (\Illuminate\Http\Request $request) => $request->user()?->puedeConsultarAvisosStock() ? route('pos.index') : ($request->user()?->soloPreparaciones() ? route('pedidos.index') : route('inicio')));
         $middleware->alias(['activo' => VerificarUsuarioActivo::class, 'permiso' => VerificarPermiso::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

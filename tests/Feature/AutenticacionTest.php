@@ -36,11 +36,49 @@ class AutenticacionTest extends TestCase
         $this->get('/usuarios')->assertRedirect('/ingresar');
     }
 
+    public function test_formularios_y_servidor_solo_permiten_dos_roles_sin_alterar_usuarios_antiguos(): void
+    {
+        $this->assertSame(['Administrador', 'Cajero'], Rol::orderBy('nombre')->pluck('nombre')->all());
+        $barista = Rol::create(['nombre'=>'Barista']);
+        $antiguo = $this->usuario('Barista');
+        $admin = $this->usuario();
+        $this->actingAs($admin);
+        foreach (['/usuarios/crear', '/usuarios/'.$antiguo->id.'/editar'] as $ruta) {
+            $this->get($ruta)->assertOk()->assertViewHas('roles', fn($roles)=>$roles->pluck('nombre')->all() === ['Administrador','Cajero'])->assertDontSee('>Barista</option>', false);
+        }
+        $datos = ['nombre'=>'Nuevo','email'=>'nuevo@dely.test','password'=>'SeguraCafe1234','password_confirmation'=>'SeguraCafe1234','rol_id'=>$barista->id,'estado'=>1];
+        $this->postJson('/usuarios', $datos)->assertUnprocessable()->assertJsonValidationErrors('rol_id');
+        $datos['email'] = $antiguo->email;
+        $this->putJson('/usuarios/'.$antiguo->id, $datos)->assertUnprocessable()->assertJsonValidationErrors('rol_id');
+        $this->assertSame([$barista->id], $antiguo->roles()->pluck('roles.id')->all());
+        $this->assertSame($antiguo->nombre, $antiguo->fresh()->nombre);
+        $this->seed(RolesPermisosSeeder::class);
+        $this->assertDatabaseHas('rol_usuario', ['usuario_id'=>$antiguo->id,'rol_id'=>$barista->id]);
+    }
+
+    public function test_crear_y_editar_con_ambos_roles_conserva_permisos(): void
+    {
+        $this->actingAs($this->usuario());
+        foreach (Rol::AUTORIZADOS as $nombre) {
+            $rol = Rol::where('nombre',$nombre)->firstOrFail();
+            $permisos = $rol->permisos()->pluck('permisos.id')->all();
+            $datos = ['nombre'=>'Nuevo '.$nombre,'email'=>strtolower($nombre).'@roles.test','password'=>'SeguraCafe1234','password_confirmation'=>'SeguraCafe1234','rol_id'=>$rol->id,'estado'=>1];
+            $this->post('/usuarios',$datos)->assertSessionHasNoErrors()->assertRedirect('/usuarios');
+            $usuario = Usuario::where('email',$datos['email'])->firstOrFail();
+            $this->put('/usuarios/'.$usuario->id,array_replace($datos,['nombre'=>'Editado '.$nombre]))->assertSessionHasNoErrors()->assertRedirect('/usuarios');
+            $this->assertSame([$rol->id], $usuario->roles()->pluck('roles.id')->all());
+            $this->assertSame('Editado '.$nombre,$usuario->fresh()->nombre);
+            $this->assertSame($permisos,$rol->permisos()->pluck('permisos.id')->all());
+        }
+    }
+
     public function test_formulario_de_acceso_esta_en_espanol(): void
     {
         $this->get('/ingresar')->assertOk()->assertSee('Iniciar sesión');
     }
 
+    #[\PHPUnit\Framework\Attributes\Group('caja-negra')]
+    #[\PHPUnit\Framework\Attributes\TestDox('CN-01: autenticación correcta y acceso al inicio')]
     public function test_inicio_de_sesion_y_salida(): void
     {
         $usuario = $this->usuario();
@@ -51,6 +89,8 @@ class AutenticacionTest extends TestCase
         $this->assertGuest();
     }
 
+    #[\PHPUnit\Framework\Attributes\Group('caja-negra')]
+    #[\PHPUnit\Framework\Attributes\TestDox('CN-02: credenciales incorrectas rechazan el acceso')]
     public function test_contrasena_incorrecta_no_autentica(): void
     {
         $usuario = $this->usuario();

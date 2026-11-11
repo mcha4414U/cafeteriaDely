@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Rol extends Model
 {
+    public const AUTORIZADOS = ['Administrador', 'Cajero'];
+
     protected $table = 'roles';
 
     protected $fillable = ['nombre', 'descripcion'];

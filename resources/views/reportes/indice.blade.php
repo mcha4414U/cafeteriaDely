@@ -1,0 +1,8 @@
+@extends('layouts.panel')
+@section('titulo','Reportes')
+@section('contenido')
+<h1>Reportes</h1><form class="d-flex gap-3 flex-wrap mb-4"><label>Desde<input class="form-control" type="date" name="desde" value="{{ $desde }}"></label><label>Hasta<input class="form-control" type="date" name="hasta" value="{{ $hasta }}"></label><button class="btn btn-cafe align-self-end">Consultar</button><button type="button" class="btn btn-outline-secondary align-self-end d-print-none" data-imprimir>Imprimir</button></form>
+<div class="row g-3 mb-4">@foreach(['Ventas netas'=>'Bs. '.\App\Support\Moneda::mostrar($total),'Operaciones'=>$cantidad,'Descuentos'=>'Bs. '.\App\Support\Moneda::mostrar($descuentos),'Compras registradas'=>'Bs. '.\App\Support\Moneda::mostrar($compras)] as $titulo=>$valor)<div class="col-md-3"><div class="card p-3"><span>{{ $titulo }}</span><strong class="fs-4">{{ $valor }}</strong></div></div>@endforeach</div>
+<p class="text-secondary">Se excluyen ventas anuladas. Ventas netas incluyen descuentos; compras no equivalen al costo de los productos vendidos.</p>
+@foreach(['Ventas por día'=>$dias,'Métodos de pago'=>$pagos,'Productos más vendidos (antes de descuentos)'=>$productos] as $titulo=>$filas)<section class="card p-4 mb-4"><h2 class="h4">{{ $titulo }}</h2><div class="table-responsive"><table class="table"><thead><tr><th>Detalle</th><th>Cantidad</th><th>Importe</th></tr></thead><tbody>@forelse($filas as $f)<tr><td>{{ $f->dia ?? $f->nombre_metodo_pago ?? $f->nombre_producto }}</td><td>{{ \App\Support\Cantidad::mostrar($f->cantidad) }}</td><td>Bs. {{ \App\Support\Moneda::mostrar($f->total) }}</td></tr>@empty<tr><td colspan="3">Sin movimientos.</td></tr>@endforelse</tbody></table></div></section>@endforeach
+@endsection

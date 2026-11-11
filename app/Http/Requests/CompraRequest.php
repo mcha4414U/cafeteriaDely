@@ -20,6 +20,8 @@ class CompraRequest extends FormRequest
             'detalles' => ['required', 'array', 'min:1', 'max:100'],
             'detalles.*.producto_id' => ['required', 'integer', 'distinct', Rule::exists('productos', 'id')->whereNull('deleted_at')->where('estado', true)],
             'detalles.*.cantidad' => ['required', 'numeric', 'min:0.001', 'max:999999999.999', 'decimal:0,3'],
+            'detalles.*.modo_cantidad' => ['nullable', Rule::in(['base', 'envases'])],
+            'detalles.*.contenido_esperado' => ['nullable', 'numeric', 'min:0.001', 'max:999999999.999', 'decimal:0,3'],
             'detalles.*.costo_unitario' => ['required', 'numeric', 'min:0', 'max:9999999999.99', 'decimal:0,2'],
         ];
     }

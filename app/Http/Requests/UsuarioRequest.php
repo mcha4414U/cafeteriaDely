@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Rol;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -22,6 +23,6 @@ class UsuarioRequest extends FormRequest
     {
         return ['nombre' => ['required', 'string', 'max:120'], 'email' => ['required', 'email', 'max:255', Rule::unique('usuarios')->ignore($this->route('usuario'))],
             'password' => [$this->route('usuario') ? 'nullable' : 'required', 'confirmed', 'max:255', Password::min(12)->mixedCase()->numbers()],
-            'rol_id' => ['required', 'integer', Rule::exists('roles', 'id')], 'estado' => ['required', 'boolean']];
+            'rol_id' => ['required', 'integer', Rule::exists('roles', 'id')->whereIn('nombre', Rol::AUTORIZADOS)], 'estado' => ['required', 'boolean']];
     }
 }

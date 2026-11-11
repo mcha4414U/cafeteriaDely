@@ -1,0 +1,387 @@
+INFORME ACADÉMICO — CAFETERÍA DELY
+Pruebas de caja negra, caja blanca, unitarias y depuración
+
+Resultado final: 91 pruebas aprobadas, 0 fallidas, 689 aserciones.
+Selección académica: 12 casos diferentes aprobados (5 CN, 4 CB y 3 PU).
+No se contabilizan las repeticiones de ejecución como casos nuevos.
+
+A. ENTORNO DE PRUEBAS
+
+Proyecto: Cafetería Dely, en la carpeta cafeteriaDely del espacio de trabajo.
+Laravel: 12.69.2.
+PHP: 8.2.12.
+PHPUnit: 11.5.56.
+Motor de testing: SQLite 3.39.2, base temporal :memory:.
+Configuración: phpunit.xml; no existe .env.testing.
+Las suites Unit y Feature ya estaban configuradas.
+APP_ENV=testing; DB_CONNECTION=sqlite; DB_DATABASE=:memory:; DB_URL vacío.
+CACHE_STORE=array; SESSION_DRIVER=array; MAIL_MAILER=array; QUEUE_CONNECTION=sync.
+Las pruebas Feature reutilizan RefreshDatabase exclusivamente en memoria.
+tests/TestCase.php::createApplication comprueba el entorno y la conexión antes
+de que RefreshDatabase prepare la base; ante una configuración distinta, aborta.
+Las tres pruebas unitarias extienden PHPUnit\Framework\TestCase, no el TestCase
+de Laravel. No usan RefreshDatabase, contenedor Laravel ni conexión a BD.
+
+Revisión del estado actual:
+- Autenticación, productos, compras e inventario tienen rutas y lógica funcional.
+- PuntoVentaController::index consulta el catálogo; resources/js/pos.js administra
+  un carrito local, con agregar, disminuir, quitar y calcular importes.
+- El manejador actual de cobrar-pos solo muestra el total y el aviso
+  "falta terminar"; no envía una venta al servidor.
+- No se encontraron controlador/servicio/ruta de registro de ventas en el código
+  revisado. La existencia de tablas de ventas no prueba una venta implementada.
+- Se seleccionó registrar una compra para CN-05. No se inventó una prueba de venta.
+
+Seguridad:
+No se ejecutó migrate:fresh sobre desarrollo, no se cambiaron credenciales,
+no se hicieron solicitudes reales a Google ni envíos de WhatsApp.
+Sus pruebas preexistentes utilizan respuestas simuladas.
+La comparación de hashes confirmó que productos, compras, detalle_compras,
+movimientos_inventario, usuarios, clientes, roles, permisos, rol_usuario, ventas
+y detalle_ventas conservaron sus datos. No se copiaron sus registros al informe.
+
+B. PRUEBAS DE CAJA NEGRA
+
+Criterio: se seleccionaron entradas y salidas observables de requisitos funcionales,
+sin usar las ramas internas como criterio para diseñar estos cinco casos.
+Los fixtures y comprobaciones de persistencia adicionales no cambian ese criterio.
+Son pruebas HTTP automatizadas Feature; no equivalen a una prueba manual del navegador.
+
+Precondición común: base SQLite vacía y aislada, migraciones en memoria,
+roles/permisos de testing y sesión correspondiente a cada caso.
+Todos los usuarios y productos indicados a continuación son fixtures de testing;
+ninguno fue creado en la base real.
+
+CN-01 — Autenticación correcta.
+Objetivo: permitir el acceso a una cuenta activa y cerrar después la sesión.
+Archivo: tests/Feature/AutenticacionTest.php.
+Método: test_inicio_de_sesion_y_salida (línea 46).
+Precondiciones: usuario activo con rol Administrador; visitante sin sesión.
+Datos: correo generado por uniqid().'@dely.test'; contraseña SeguraCafe1234,
+exclusiva del fixture de testing.
+Pasos: POST /ingresar; comprobar usuario autenticado; GET /inicio;
+POST /salir; comprobar que la sesión terminó.
+Resultado real: redirección a /inicio, página HTTP 200, salida a /ingresar
+y usuario no autenticado después del cierre.
+
+CN-02 — Autenticación incorrecta.
+Objetivo: impedir acceso con una contraseña inválida.
+Archivo: tests/Feature/AutenticacionTest.php.
+Método: test_contrasena_incorrecta_no_autentica (línea 58).
+Precondiciones: usuario de testing activo, visitante sin sesión.
+Datos: correo del fixture; password=incorrecta.
+Pasos: POST /ingresar; comprobar error de validación y ausencia de autenticación.
+Resultado real: error asociado a email y usuario no autenticado.
+
+CN-03 — Validación de producto.
+Objetivo: rechazar un producto que omite campos obligatorios.
+Archivo: tests/Feature/CatalogosTest.php.
+Método: test_producto_sin_campos_obligatorios_es_rechazado (línea 55).
+Precondiciones: administrador de testing autenticado y categoría activa.
+Datos: tipo=venta, código=CAF-001, precio_compra=8.50, stock_inicial=12.500,
+stock_minimo=5, unidad_medida=unidad, estado=1; se omiten nombre y precio_venta.
+Pasos: enviar POST /productos desde /productos/crear; comprobar errores;
+comprobar que no se crearon productos ni movimientos.
+Resultado real: redirección a /productos/crear, errores en nombre y precio_venta,
+0 productos y 0 movimientos.
+
+CN-04 — Filtros de productos.
+Objetivo: mostrar solo los productos que cumplen el filtro seleccionado.
+Archivo: tests/Feature/CatalogosTest.php.
+Método: test_filtros_stock_y_categoria (línea 170).
+Precondiciones: administrador autenticado; fixture Cappuccino, categoría Café,
+stock 12.500 y mínimo 5; otra categoría de testing llamada Snacks.
+Pasos: consultar stock=normal y stock=agotado; preparar stock 2 en el fixture;
+consultar stock=bajo; consultar categoria_id de Snacks.
+Resultado real: aparece con normal, no aparece con agotado, aparece con bajo
+después del cambio del fixture y no aparece bajo la categoría Snacks.
+Todas esas consultas respondieron HTTP 200.
+
+CN-05 — Registro de compra.
+Objetivo: registrar una compra y reflejar su importe y existencias correctamente.
+Archivo: tests/Feature/ComprasInventarioTest.php.
+Método: test_compra_calcula_total_y_actualiza_stock_con_movimiento (línea 55).
+Precondiciones: administrador autenticado; proveedor activo; producto de testing
+Café molido con stock inicial 0 y unidad kg.
+Datos: UUID de idempotencia, proveedor del fixture, fecha del día,
+cantidad=2.500 y costo_unitario=10.25. Se envían además total=1 y usuario_id=999
+para comprobar que no determinan el importe ni el responsable.
+Pasos: POST /compras; consultar detalle de compra, inventario e historial.
+Resultado real: compra con total 25.63; stock 2.500; costo 10.25; responsable
+autenticado; movimiento de entrada por 2.5. En inventario se muestra 2.5.
+
+TABLA RESUMEN DE CAJA NEGRA
+
+ID | Módulo | Entrada | Resultado esperado | Resultado obtenido | Estado
+CN-01 | Autenticación | Cuenta activa y contraseña de testing correcta | Acceso a /inicio y cierre de sesión | Redirección correcta, HTTP 200 y salida comprobada | APROBADO
+CN-02 | Autenticación | Contraseña incorrecta | Rechazo sin autenticación | Error email y sesión de visitante | APROBADO
+CN-03 | Productos | Sin nombre ni precio_venta | Errores y ningún registro creado | Ambos errores; productos=0 y movimientos=0 | APROBADO
+CN-04 | Productos | Filtros normal, agotado, bajo y otra categoría | Incluir/excluir según filtro | Cuatro respuestas HTTP 200 con contenido esperado | APROBADO
+CN-05 | Compras/inventario | 2.500 kg a Bs. 10.25 | Total Bs. 25.63 y entrada de stock | Importe, responsable, movimiento y stock correctos | APROBADO
+
+Ejecución: 5 aprobadas, 0 fallidas, 43 aserciones.
+Evidencia: 02_caja_negra.txt y 02_caja_negra.xml.
+
+C. PRUEBAS DE CAJA BLANCA
+
+Archivo analizado: app/Services/ServicioCompras.php.
+Clase: App\Services\ServicioCompras.
+Método real: registrar(array $datos, int $usuarioId): Compra, línea 15.
+Se reutilizaron cuatro pruebas existentes en tests/Feature/ComprasInventarioTest.php
+y se identificaron con el grupo caja-blanca y nombres CB mediante TestDox.
+
+ID | Archivo/Método | Condición/Rama | Entrada | Resultado esperado | Resultado obtenido | Estado
+CB-01 | ServicioCompras.php::registrar, líneas 27-32 | if ($existente) verdadero; condición de usuario/huella distintos falsa; return $existente | Dos envíos de la misma clave y datos: 2.500 a 10.25 | Reutilizar compra sin duplicar existencias | 1 compra, 1 detalle, 1 movimiento y stock 2.500 | APROBADO
+CB-02 | ServicioCompras.php::registrar, líneas 27-29 | Compra existente y huella_solicitud distinta: ValidationException | Misma clave; segundo envío cambia cantidad de 2.500 a 3.000 | Rechazar solicitud distinta sin nueva entrada | Error clave_idempotencia; stock conserva 2.500 | APROBADO
+CB-03 | ServicioCompras.php::registrar, líneas 47-49 | bccomp($nuevoStock, '999999999.999', 3) > 0 verdadero | Stock 999999999.000 más 2.500 | Rechazar exceso sin guardar compra parcial | Error detalles; 0 compras, 0 detalles; stock inicial intacto | APROBADO
+CB-04 | ServicioCompras.php::registrar, líneas 51-55 | bccomp($total, '9999999999.99', 2) > 0 verdadero | Cantidad 100; costo 9999999999.99 | Rechazar importe fuera del límite | Error detalles y 0 compras | APROBADO
+
+Correspondencia con los métodos de prueba:
+CB-01: test_reintentar_no_duplica_compra_ni_stock, línea 71.
+CB-02: test_misma_clave_con_datos_distintos_se_rechaza, línea 84.
+CB-03: test_limite_stock_no_guarda_compra_parcial, línea 119.
+CB-04: test_total_excesivo_se_rechaza, línea 130.
+
+Cobertura de caminos demostrada:
+- Los primeros envíos de CB-01 y CB-02 recorren la rama de compra inexistente.
+- CB-01 comprueba el retorno temprano de una compra idéntica.
+- CB-02 comprueba el rechazo de una huella diferente.
+- Las compras válidas de CN-05 y los primeros envíos de CB-01/CB-02 recorren
+  las ramas que NO exceden stock ni importe; CB-03 y CB-04 prueban sus rechazos.
+- La rama de usuario diferente dentro del OR de la línea 28 no se acredita
+  específicamente con esta selección. No se afirma cobertura exhaustiva.
+- No se midió cobertura de líneas/ramas con Xdebug o PCOV: no se presenta un
+  porcentaje de cobertura ni se afirma cobertura del 100 %.
+
+Ejecución: 4 aprobadas, 0 fallidas, 18 aserciones.
+Evidencia: 03_caja_blanca.txt y 03_caja_blanca.xml.
+
+D. PRUEBAS UNITARIAS
+
+Archivo nuevo: tests/Unit/ReglasDominioTest.php.
+Clase: Tests\Unit\ReglasDominioTest.
+Base: PHPUnit\Framework\TestCase, sin aplicación Laravel ni BD.
+El ExampleTest unitario ya existente solo comprueba assertTrue(true);
+se conserva, pero no se usa para cumplir los tres casos académicos.
+
+PU-01
+Método de prueba: test_formato_de_cantidades_aislado, línea 16.
+Unidad probada: App\Support\Cantidad::mostrar.
+Archivo de producción: app/Support/Cantidad.php, línea 7.
+Objetivo: eliminar ceros decimales finales sin redondear ni perder precisión.
+Entrada -> esperado -> obtenido:
+15.000 -> 15 -> 15
+72.000 -> 72 -> 72
+20.500 -> 20.5 -> 20.5
+20.250 -> 20.25 -> 20.25
+20.125 -> 20.125 -> 20.125
+0.000 -> 0 -> 0
+999999999.999 -> 999999999.999 -> 999999999.999
+100 entero -> 100 -> 100
+null -> 0 -> 0
+2.5 numérico -> 2.5 -> 2.5
+Estado: APROBADO. 10 aserciones.
+
+PU-02
+Método de prueba: test_estado_de_stock_sin_base_de_datos, línea 28.
+Unidad probada: App\Models\Producto::estadoStock.
+Archivo de producción: app/Models/Producto.php, línea 36.
+Objetivo: comprobar las fronteras de las clasificaciones de existencias.
+Entrada stock/mínimo -> esperado -> obtenido:
+0.000/5.000 -> Agotado -> Agotado
+0.001/5.000 -> Stock bajo -> Stock bajo
+5.000/5.000 -> Stock bajo -> Stock bajo
+5.001/5.000 -> Normal -> Normal
+0.000/0.000 -> Agotado -> Agotado
+0.001/0.000 -> Normal -> Normal
+Estado: APROBADO. 6 aserciones.
+
+PU-03
+Método de prueba: test_etiquetas_de_movimientos_sin_base_de_datos, línea 45.
+Unidad probada: App\Models\MovimientoInventario::etiquetaTipo.
+Archivo de producción: app/Models/MovimientoInventario.php, línea 33.
+Objetivo: comprobar el match de etiquetas y su alternativa por defecto.
+Entrada -> esperado -> obtenido:
+entrada_compra -> Entrada por compra -> Entrada por compra
+salida_venta -> Salida por venta -> Salida por venta
+salida_desperdicio -> Salida por desperdicio -> Salida por desperdicio
+ajuste -> Ajuste manual -> Ajuste manual
+tipo_desconocido -> tipo_desconocido -> tipo_desconocido
+Estado final: APROBADO. 5 aserciones.
+Probar la etiqueta salida_venta no implica que registrar ventas esté implementado.
+
+Ejecución aislada: 3 aprobadas, 0 fallidas, 21 aserciones.
+Evidencia: 04_unitarias.txt y 04_unitarias.xml.
+
+E. DEPURACIÓN
+
+Primera ejecución real:
+Tests: 1 failed, 90 passed (684 assertions)
+Duration: 45.67s
+
+La incidencia fue de preparación de PU-03, no un error funcional del proyecto.
+Archivo: tests/Unit/ReglasDominioTest.php, línea 54 inicial.
+Método: test_etiquetas_de_movimientos_sin_base_de_datos.
+Error: Call to a member function connection() on null.
+
+Causa:
+El constructor new MovimientoInventario(['tipo' => $tipo]) activa asignación
+masiva. Como el modelo usa $guarded = ['id'], Eloquent intenta consultar el
+esquema para determinar columnas asignables. En una Unit pura no hay resolvedor
+de conexión; el error ocurrió antes de comprobar etiquetaTipo.
+
+Corrección mínima, exclusivamente en la prueba:
+$movimiento = new MovimientoInventario;
+$movimiento->tipo = $tipo;
+
+No se cambió el modelo, no se creó una BD para esta prueba y no se convirtió
+en Feature. La prueba sigue ejecutando el método real.
+
+Resultado posterior:
+PU-03 aprobada, conjunto unitario 3/3 aprobado y suite completa 91/91 aprobada.
+La evidencia inicial se conservó; no se introdujeron errores intencionalmente.
+
+No se detectaron errores funcionales en los casos de prueba ejecutados.
+Esto no demuestra que el sistema esté libre de todo defecto.
+
+F. ARCHIVOS CREADOS
+
+Rutas relativas a cafeteriaDely/:
+tests/Unit/ReglasDominioTest.php
+evidencias/pruebas/01_phpunit_completo.txt
+evidencias/pruebas/01_phpunit_completo.xml
+evidencias/pruebas/02_caja_negra.txt
+evidencias/pruebas/02_caja_negra.xml
+evidencias/pruebas/03_caja_blanca.txt
+evidencias/pruebas/03_caja_blanca.xml
+evidencias/pruebas/04_unitarias.txt
+evidencias/pruebas/04_unitarias.xml
+evidencias/pruebas/05_phpunit_final.txt
+evidencias/pruebas/05_phpunit_final.xml
+evidencias/pruebas/DEPURACION.txt
+evidencias/pruebas/resultados.json
+evidencias/pruebas/INFORME_ACADEMICO.txt
+
+Los TXT contienen la salida real; los XML, resultados JUnit verificables.
+resultados.json contiene conteos extraídos de los XML, entorno, métodos ejecutados
+e integridad de tablas y archivos, sin credenciales ni registros reales.
+
+G. ARCHIVOS MODIFICADOS
+
+tests/TestCase.php:
+salvaguarda previa a RefreshDatabase que exige testing, SQLite :memory: y DB_URL vacío.
+
+tests/Feature/AutenticacionTest.php:
+atributos Group y TestDox para reutilizar CN-01 y CN-02, sin cambiar su lógica.
+
+tests/Feature/CatalogosTest.php:
+nuevo CN-03 de campos obligatorios; atributos para ese caso y para el filtro CN-04.
+
+tests/Feature/ComprasInventarioTest.php:
+atributos para identificar CN-05 y CB-01 a CB-04, conservando sus aserciones existentes.
+
+H. ARCHIVOS CONSERVADOS
+
+Conservados los archivos funcionales de app/, routes/, resources/, config/
+y las migraciones existentes, comprobados contra hashes previos.
+Conservados phpunit.xml, composer.json, composer.lock, package.json,
+package-lock.json, vite.config.js, .env y .env.example.
+No se modificaron diseño, CSS, imágenes, página pública, navegación, Google OAuth,
+WhatsApp, POS, compras, inventario, productos, roles ni permisos.
+Se conservaron las demás pruebas preexistentes.
+No se exportaron contraseñas, tokens ni datos privados a las evidencias.
+
+I. ARCHIVOS ELIMINADOS
+
+Ninguno.
+
+J. RESULTADO REAL DE PHPUNIT
+
+Primera ejecución de la suite completa:
+php artisan test --colors=never --log-junit=evidencias/pruebas/01_phpunit_completo.xml
+
+Después de corregir la preparación de PU-03:
+php artisan test --group=caja-negra --testdox --colors=never --log-junit=evidencias/pruebas/02_caja_negra.xml
+php artisan test --group=caja-blanca --testdox --colors=never --log-junit=evidencias/pruebas/03_caja_blanca.xml
+php artisan test --testsuite=Unit --group=unitarias-academicas --testdox --colors=never --log-junit=evidencias/pruebas/04_unitarias.xml
+
+Ejecución final equivalente a php artisan test, añadiendo salida JUnit y sin colores:
+php artisan test --colors=never --log-junit=evidencias/pruebas/05_phpunit_final.xml
+
+La salida estándar y los errores de cada comando se guardaron en el TXT del mismo nombre.
+Resumen exacto de la última ejecución:
+  Tests:    91 passed (689 assertions)
+  Duration: 36.29s
+
+Código de salida final: 0.
+El reporte JUnit confirma 91 casos, 0 fallos, 0 errores y 0 omitidos.
+La suite total contiene 87 Feature y 4 Unit; una Unit es el ExampleTest preexistente.
+Solo tres Unit prueban unidades del dominio y se incluyen en la selección académica.
+
+K. RESUMEN DE RESULTADOS
+
+Selección académica, casos distintos:
+Categoría | Ejecutadas | Aprobadas | Fallidas | Aserciones
+Caja negra | 5 | 5 | 0 | 43
+Caja blanca | 4 | 4 | 0 | 18
+Unitarias académicas | 3 | 3 | 0 | 21
+TOTAL ACADÉMICO | 12 | 12 | 0 | 82
+
+Suite completa final:
+Ejecutadas: 91
+Aprobadas: 91
+Fallidas: 0
+Omitidas: 0
+Aserciones: 689
+
+Los 12 casos académicos están incluidos en las 91 pruebas.
+No se suman 12+91 ni se cuentan de nuevo las repeticiones.
+La ejecución inicial fallida se documenta aparte; no se borra del historial.
+
+L. EVIDENCIAS Y CAPTURAS PARA EL DOCENTE
+
+Abrir una terminal en la raíz cafeteriaDely. No abrir ni capturar .env.
+
+CAPTURA 1 — Caja negra:
+Mostrar la salida guardada con:
+Get-Content -Encoding UTF8 evidencias/pruebas/02_caja_negra.txt
+Incluir CN-01 a CN-05 y OK (5 tests, 43 assertions).
+
+CAPTURA 2 — Caja blanca:
+Get-Content -Encoding UTF8 evidencias/pruebas/03_caja_blanca.txt
+Incluir CB-01 a CB-04 y OK (4 tests, 18 assertions).
+
+CAPTURA 3 — Código de caja blanca:
+Abrir app/Services/ServicioCompras.php.
+Mostrar registrar, líneas 25 a 56: detección de compra existente,
+comparación de huella y límites de stock/importe.
+Relacionar las ramas con CB-01 a CB-04; no modificar el archivo.
+
+CAPTURA 4 — Pruebas unitarias ejecutadas:
+Get-Content -Encoding UTF8 evidencias/pruebas/04_unitarias.txt
+Incluir PU-01 a PU-03 y OK (3 tests, 21 assertions).
+
+CAPTURA 5 — Código de pruebas unitarias:
+Abrir tests/Unit/ReglasDominioTest.php.
+Mostrar import PHPUnit\Framework\TestCase, la clase y el método
+test_formato_de_cantidades_aislado (líneas 5 a 24).
+En otra captura si hace falta, mostrar PU-02 y PU-03 (líneas 27 a 59).
+Explicar que los modelos se instancian en memoria sin save() ni consultas.
+
+CAPTURA 6 — Ejecución completa final de PHPUnit:
+Get-Content -Encoding UTF8 evidencias/pruebas/05_phpunit_final.txt -Tail 12
+Mostrar Tests: 91 passed (689 assertions) y Duration: 36.29s.
+
+CAPTURA 7 — Depuración real:
+Abrir evidencias/pruebas/DEPURACION.txt y mostrar el error inicial y la corrección.
+Se puede acompañar con el final de 01_phpunit_completo.txt y 04_unitarias.txt.
+Aclarar que fue una incidencia del test, no un defecto funcional del sistema.
+
+CAPTURA 8 — Aislamiento del entorno:
+Abrir phpunit.xml, bloque <php>, para mostrar SQLite :memory: y APP_ENV=testing.
+Mostrar también tests/TestCase.php::createApplication, líneas 10 a 23.
+No mostrar .env ni credenciales.
+
+Entrega recomendada:
+INFORME_ACADEMICO.txt, las capturas indicadas, las pruebas PHP modificadas/creadas
+y los TXT/XML de evidencia. No incluir .env ni credenciales del proyecto.

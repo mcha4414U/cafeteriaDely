@@ -11,17 +11,17 @@ class UsuarioController extends Controller
 {
     public function index()
     {
-        return view('usuarios.indice', ['usuarios' => Usuario::with('roles')->orderBy('nombre')->get(), 'roles' => Rol::with('permisos')->get()]);
+        return view('usuarios.indice', ['usuarios' => Usuario::with('roles')->orderBy('nombre')->get(), 'roles' => Rol::with('permisos')->whereIn('nombre', Rol::AUTORIZADOS)->orderBy('nombre')->get()]);
     }
 
     public function crear()
     {
-        return view('usuarios.formulario', ['usuario' => new Usuario, 'roles' => Rol::all()]);
+        return view('usuarios.formulario', ['usuario' => new Usuario, 'roles' => Rol::whereIn('nombre', Rol::AUTORIZADOS)->orderBy('nombre')->get()]);
     }
 
     public function editar(Usuario $usuario)
     {
-        return view('usuarios.formulario', compact('usuario') + ['roles' => Rol::all()]);
+        return view('usuarios.formulario', compact('usuario') + ['roles' => Rol::whereIn('nombre', Rol::AUTORIZADOS)->orderBy('nombre')->get()]);
     }
 
     public function guardar(UsuarioRequest $solicitud, ServicioUsuarios $servicio)

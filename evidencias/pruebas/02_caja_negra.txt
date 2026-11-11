@@ -1,0 +1,34 @@
+PHPUnit 11.5.56 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.2.12
+Configuration: C:\Users\jhmic\OneDrive\Desktop\Nueva carpeta (2)\cafeteriaDely\phpunit.xml
+
+
+   PASS  Tests\Feature\AutenticacionTest
+  ✓ inicio de sesion y salida                                                                                   10.73s  
+  ✓ contrasena incorrecta no autentica                                                                           0.70s  
+
+   PASS  Tests\Feature\CatalogosTest
+  ✓ producto sin campos obligatorios es rechazado                                                                0.65s  
+  ✓ filtros stock y categoria                                                                                    0.51s  
+
+   PASS  Tests\Feature\ComprasInventarioTest
+  ✓ compra calcula total y actualiza stock con movimiento                                                        0.73s  
+
+  Tests:    5 passed (43 assertions)
+  Duration: 24.57s
+
+Time: 00:15.004, Memory: 50.00 MB
+
+Autenticacion (Tests\Feature\Autenticacion)
+ ✔ CN-01: autenticación correcta y acceso al inicio
+ ✔ CN-02: credenciales incorrectas rechazan el acceso
+
+Catalogos (Tests\Feature\Catalogos)
+ ✔ CN-03: producto sin campos obligatorios es rechazado
+ ✔ CN-04: filtro de productos por stock y categoría
+
+Compras Inventario (Tests\Feature\ComprasInventario)
+ ✔ CN-05: compra registrada con total e inventario correctos
+
+OK (5 tests, 43 assertions)

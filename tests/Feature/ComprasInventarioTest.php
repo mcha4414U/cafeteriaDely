@@ -50,6 +50,8 @@ class ComprasInventarioTest extends TestCase
         }
     }
 
+    #[\PHPUnit\Framework\Attributes\Group('caja-negra')]
+    #[\PHPUnit\Framework\Attributes\TestDox('CN-05: compra registrada con total e inventario correctos')]
     public function test_compra_calcula_total_y_actualiza_stock_con_movimiento(): void
     {
         $this->post('/compras', $this->datos() + ['total' => 1, 'usuario_id' => 999])->assertRedirect();
@@ -59,11 +61,13 @@ class ComprasInventarioTest extends TestCase
         $this->assertSame('10.25', $this->producto->fresh()->precio_compra);
         $this->assertSame($this->administrador->id, $compra->usuario_id);
         $this->assertDatabaseHas('movimientos_inventario', ['compra_id' => $compra->id, 'producto_id' => $this->producto->id, 'tipo' => 'entrada_compra', 'stock_anterior' => 0, 'stock_nuevo' => 2.5, 'cantidad' => 2.5]);
-        $this->get('/compras/'.$compra->id)->assertOk()->assertSee('25.63')->assertSee('Café molido');
-        $this->get('/inventario')->assertOk()->assertSee('2.500')->assertSee('Stock bajo');
+        $this->get('/compras/'.$compra->id)->assertOk()->assertSee('25,63')->assertSee('Café molido');
+        $this->get('/inventario')->assertOk()->assertSee('<td>2,5</td>', false)->assertSee('Stock bajo');
         $this->get('/inventario/movimientos?compra_id='.$compra->id)->assertOk()->assertSee($compra->numero);
     }
 
+    #[\PHPUnit\Framework\Attributes\Group('caja-blanca')]
+    #[\PHPUnit\Framework\Attributes\TestDox('CB-01: compra existente con la misma huella se reutiliza')]
     public function test_reintentar_no_duplica_compra_ni_stock(): void
     {
         $datos = $this->datos();
@@ -75,6 +79,8 @@ class ComprasInventarioTest extends TestCase
         $this->assertSame('2.500', $this->producto->fresh()->stock_actual);
     }
 
+    #[\PHPUnit\Framework\Attributes\Group('caja-blanca')]
+    #[\PHPUnit\Framework\Attributes\TestDox('CB-02: compra existente con huella distinta se rechaza')]
     public function test_misma_clave_con_datos_distintos_se_rechaza(): void
     {
         $datos = $this->datos();
@@ -108,6 +114,8 @@ class ComprasInventarioTest extends TestCase
         $this->assertDatabaseCount('compras', 0);
     }
 
+    #[\PHPUnit\Framework\Attributes\Group('caja-blanca')]
+    #[\PHPUnit\Framework\Attributes\TestDox('CB-03: rama que rechaza superar el stock máximo')]
     public function test_limite_stock_no_guarda_compra_parcial(): void
     {
         $this->producto->forceFill(['stock_actual' => '999999999.000'])->save();
@@ -117,6 +125,8 @@ class ComprasInventarioTest extends TestCase
         $this->assertSame('999999999.000', $this->producto->fresh()->stock_actual);
     }
 
+    #[\PHPUnit\Framework\Attributes\Group('caja-blanca')]
+    #[\PHPUnit\Framework\Attributes\TestDox('CB-04: rama que rechaza superar el total máximo')]
     public function test_total_excesivo_se_rechaza(): void
     {
         $datos = $this->datos();
@@ -155,7 +165,7 @@ class ComprasInventarioTest extends TestCase
         $this->proveedor->update(['nombre' => 'Proveedor cambiado']);
         $this->proveedor->delete();
         $this->get('/compras/'.$compra->id)->assertOk()->assertSee('Café molido')->assertSee('Proveedor Dely');
-        $this->get('/inventario?estado=archivado')->assertOk()->assertSee('Nombre nuevo')->assertSee('2.500');
+        $this->get('/inventario?estado=archivado')->assertOk()->assertSee('Nombre nuevo')->assertSee('<td>2,5</td>', false);
         $this->get('/inventario/movimientos')->assertOk()->assertSee($compra->numero);
     }
 

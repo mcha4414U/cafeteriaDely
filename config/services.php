@@ -2,6 +2,17 @@
 
 return [
 
+    'whatsapp' => [
+        'enabled' => env('WHATSAPP_ENABLED', false),
+        'token' => env('WHATSAPP_ACCESS_TOKEN'),
+        'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
+        'business_account_id' => env('WHATSAPP_BUSINESS_ACCOUNT_ID'),
+        'destinatario' => env('WHATSAPP_DESTINATARIO'),
+        'version' => 'v23.0',
+        'webhook_verify_token' => env('WHATSAPP_WEBHOOK_VERIFY_TOKEN'),
+        'app_secret' => env('WHATSAPP_APP_SECRET'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Third Party Services

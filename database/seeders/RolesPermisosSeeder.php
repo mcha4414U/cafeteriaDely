@@ -18,6 +18,7 @@ class RolesPermisosSeeder extends Seeder
         $administrador = Rol::firstOrCreate(['nombre' => 'Administrador'], ['descripcion' => 'Administración de la cafetería']);
         $cajero = Rol::firstOrCreate(['nombre' => 'Cajero'], ['descripcion' => 'Ventas y atención al cliente']);
         $administrador->permisos()->sync(Permiso::whereIn('nombre', $permisos)->pluck('id'));
+        $this->call(PreparacionesPermisosSeeder::class);
         $cajero->permisos()->sync(Permiso::whereIn('nombre', ['pos.usar', 'productos.consultar', 'ventas.propias', 'clientes.consultar', 'clientes.registrar'])->pluck('id'));
     }
 }
